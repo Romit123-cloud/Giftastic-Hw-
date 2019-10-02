@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Anime Giphy</title>
+</head>
+
+<body>
+  <button data-anime="Jojo's Bizarre Adventure">Za Wardo!</button>
+  <button data-anime="Naruto">Six Paths awaken!</button>
+  <button data-anime="Yu Yu Hakusho">Rei-Gun!</button>
+  <button data-anime="My Hero Academia">Plus Ultra!!!</button>
+  <button data-anime="Black Clover">Four-leaf-grimoire </button>
+
+  <div id="gifs-appear-here">
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+  
+    $("button").on("click", function() {
+      
+      var anime = $(this).attr("data-anime");
+
+     
+      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+        anime + "&api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9&limit=10";
+
+      
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      })
+        
+        .then(function(response) {
+         
+          var results = response.data;
+
+          for (var i = 0; i < results.length; i++) {
+
+            if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
+             
+              var gifDiv = $("<div>");
+
+              
+              var rating = results[i].rating;
+
+              
+              var p = $("<p>").text("Rating: " + rating);
+
+              
+              var animeImage = $("<img>");
+
+              
+              animeImage.attr("src", results[i].images.fixed_height.url);
+
+             
+              gifDiv.append(p);
+              gifDiv.append(animeImage);
+
+              
+              $("#gifs-appear-here").prepend(gifDiv);
+             
+              //need to add function and loop that makes gifs still and animate/static
+            }
+          }
+        });
+    });
+  </script>
+</body>
+
+</html>
